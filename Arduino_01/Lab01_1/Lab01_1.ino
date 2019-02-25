@@ -9,38 +9,49 @@
 
 const int buzzer_pin = 8;
 const unsigned int buttom_num = 7;
-unsigned int pressed_buttom_index;
-const int buttom_pin[buttom_num] = {A0, A1, A2, A3, A4, A5, 2};
-int melody[buttom_num] = { NOTE_C4, NOTE_D4, NOTE_E4, NOTE_F4, NOTE_G4, NOTE_A4, NOTE_B4 };
+class piano_key
+{
+public:
+    piano_key(int pin, int melody): pin(pin), melody(melody) {}
+    int pin, melody;
+};
+const piano_key piano_keys[buttom_num] = {
+    {A0, NOTE_C4},
+    {A1, NOTE_D4},
+    {A2, NOTE_E4},
+    {A3, NOTE_F4},
+    {A4, NOTE_G4},
+    {A5, NOTE_A4},
+    { 2, NOTE_B4},
+};
+
+unsigned int pressed_buttom_index; // [TODO] find out why declare this variable in loop() will make "if statement" failed
 
 void setup()
 {
     for(unsigned int i = 0;i < buttom_num;++i)
     {
-        pinMode(buttom_pin[i], INPUT);
+        pinMode(piano_keys[i].pin, INPUT);
     }
-    //Serial.begin(115200);
-    Serial.begin(9600);
+    Serial.begin(115200);
 }
 
 void loop()
 {
-    
+    //unsigned int pressed_buttom_index;
     for(unsigned int i = 0;i < buttom_num + 1;++i)
     {
         if(i == buttom_num)
             pressed_buttom_index = buttom_num;
 
-        if(digitalRead(buttom_pin[i]))
+        if(digitalRead(piano_keys[i].pin))
         {
             pressed_buttom_index = i;
             break;
         }
     }
-    //String log = String(pressed_buttom_index);
-    //Serial.write(log);
+
     Serial.print(pressed_buttom_index);
-    //Serial.print(buttom_num);
     if(pressed_buttom_index == buttom_num)
     {
         Serial.write(" No Tone\n");
@@ -49,6 +60,6 @@ void loop()
     else
     {
         Serial.write(" Bee\n");
-        tone(buzzer_pin, melody[pressed_buttom_index]);
+        tone(buzzer_pin, piano_keys[pressed_buttom_index].melody);
     }
 }
