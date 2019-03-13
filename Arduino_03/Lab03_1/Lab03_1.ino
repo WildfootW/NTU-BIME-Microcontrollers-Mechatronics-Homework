@@ -6,61 +6,82 @@
  *
  */
 
+/*
+ * class design for L298 H-bridge controling two DC motor wheels.
+ */
 #ifndef WHEEL_CONTROL_H
 #define WHEEL_CONTROL_H
-class wheel_control
+#define with_enable_line 0
+class WheelControl
 {
 public:
-    wheel_control(byte pin_a, byte pin_b, byte pin_en): pin_a(pin_a), pin_b(pin_b), pin_en(pin_en) {}
+#if with_enable_line
+    WheelControl(byte pin_a, byte pin_b, byte pin_en): pin_a(pin_a), pin_b(pin_b), pin_en(pin_en) {} // digital, digital, pwm
     void initial(double ratio = 1) { pinMode(pin_a, OUTPUT); pinMode(pin_b, OUTPUT); pinMode(pin_en, OUTPUT); output_ratio = ratio; }
-    void set_speed(uint8_t speed, bool backward = false) const
+#else
+    WheelControl(byte pin_a, byte pin_b): pin_a(pin_a), pin_b(pin_b) {} // pwm, pwm
+    void initial(double ratio = 1) { pinMode(pin_a, OUTPUT); pinMode(pin_b, OUTPUT); output_ratio = ratio; }
+#endif // with_enable_line
+    void set_speed(uint8_t speed, bool backward = false) { forward = !backward; current_speed = speed * output_ratio; }
+    void execute() const
     {
-        analogWrite(pin_en, speed * output_ratio);
-        Serial.println(speed * output_ratio);
-        if(speed == 0)    { digitalWrite(pin_a, HIGH); digitalWrite(pin_b, HIGH); }
-        else if(backward) { digitalWrite(pin_a, LOW ); digitalWrite(pin_b, HIGH); }
-        else              { digitalWrite(pin_a, HIGH); digitalWrite(pin_b, LOW ); }
+#if with_enable_line
+        analogWrite(pin_en, current_speed);
+        if(forward) { digitalWrite(pin_a, HIGH); digitalWrite(pin_b, LOW ); }
+        else        { digitalWrite(pin_a, LOW ); digitalWrite(pin_b, HIGH); }
+#else
+        if(forward) { analogWrite(pin_a, current_speed); digitalWrite(pin_b, LOW ); }
+        else        { digitalWrite(pin_a, LOW ); analogWrite(pin_b, current_speed); }
+#endif // with_enable_line
     }
 private:
-    const byte pin_a, pin_b, pin_en;
+    const byte pin_a, pin_b;
+#if with_enable_line
+    const byte pin_en;
+#endif // with_enable_line
+    bool forward;
+    uint8_t current_speed;
     double output_ratio;
 };
 
-class pair_wheel_control
+class PairWheelControl
 {
 public:
-    pair_wheel_control(byte pin_a_left , byte pin_b_left,  byte pin_en_left,
-                       byte pin_a_right, byte pin_b_right, byte pin_en_right):
-                       left_wheel (pin_a_left,  pin_b_left,  pin_en_left),
-                       right_wheel(pin_a_right, pin_b_right, pin_en_right) {}
+#if with_enable_line
+    PairWheelControl(byte pin_a_left , byte pin_b_left,  byte pin_en_left,      // digital, digital, pwm
+                     byte pin_a_right, byte pin_b_right, byte pin_en_right):    // digital, digital, pwm
+                     left_wheel (pin_a_left,  pin_b_left,  pin_en_left),
+                     right_wheel(pin_a_right, pin_b_right, pin_en_right) {}
+#else
+    PairWheelControl(byte pin_a_left , byte pin_b_left,                         // pwm, pwm
+                     byte pin_a_right, byte pin_b_right):                       // pwm, pwm
+                     left_wheel (pin_a_left,  pin_b_left),
+                     right_wheel(pin_a_right, pin_b_right) {}
+#endif // with_enable_line
     void initial(double speed_ratio = 1)    // speed_ratio = left_speed / right_speed;
     {
-        if(speed_ratio > 1)
-        {
-             left_wheel.initial(1 / speed_ratio);
-            right_wheel.initial(1);
-        }
-        else
-        {
-             left_wheel.initial(1);
-            right_wheel.initial(speed_ratio);
-        }
+        if(speed_ratio > 1) { left_wheel.initial(1 / speed_ratio); right_wheel.initial(1);           }
+        else                { left_wheel.initial(1);               right_wheel.initial(speed_ratio); }
     }
-    void full_speed_ahead() const { right_wheel.set_speed(255); left_wheel.set_speed(255); }
-    void stop()             const { right_wheel.set_speed(0);   left_wheel.set_speed(0);   }
-    void right_turn()       const { right_wheel.set_speed(127); left_wheel.set_speed(255); }
+    void full_speed_ahead() { right_wheel.set_speed(255); left_wheel.set_speed(255); execute(); }
+    void stop()             { right_wheel.set_speed(0);   left_wheel.set_speed(0);   execute(); }
+    void right_turn()       { right_wheel.set_speed(127); left_wheel.set_speed(255); execute(); }
 
 private:
-    wheel_control left_wheel, right_wheel;
+    void execute() const { left_wheel.execute(); right_wheel.execute(); }
+    WheelControl left_wheel, right_wheel;
 };
 #endif//WHEEL_CONTROL_H
 
-pair_wheel_control pair_wheel(8, 9, 10, 13, 12, 11);
+#if with_enable_line
+PairWheelControl pair_wheel(7, 8, 9, 13, 12, 11);
+#else
+PairWheelControl pair_wheel(5, 6, 9, 10);
+#endif // with_enable_line
 
 void setup()
 {
     Serial.begin(115200);
-    //pair_wheel.initial(0.19215686274); // 49/255
     pair_wheel.initial(2);
 }
 
