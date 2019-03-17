@@ -7,11 +7,11 @@
  */
 
 /*
- * class design for L298 H-bridge controling two DC motor wheels.
+ * class design for Arduino uno & L298 H-bridge controling two DC motor wheels.
  */
 #ifndef WHEEL_CONTROL_H
 #define WHEEL_CONTROL_H
-#define with_enable_line 0
+#define with_enable_line 1
 class WheelControl
 {
 public:
@@ -63,9 +63,11 @@ public:
         if(speed_ratio > 1) { left_wheel.initial(1 / speed_ratio); right_wheel.initial(1);           }
         else                { left_wheel.initial(1);               right_wheel.initial(speed_ratio); }
     }
-    void full_speed_ahead() { right_wheel.set_speed(255); left_wheel.set_speed(255); execute(); }
-    void stop()             { right_wheel.set_speed(0);   left_wheel.set_speed(0);   execute(); }
-    void right_turn()       { right_wheel.set_speed(127); left_wheel.set_speed(255); execute(); }
+    PairWheelControl& keep(unsigned int time) { delay(time); return (*this); }
+    PairWheelControl& full_speed_ahead() { right_wheel.set_speed(255);       left_wheel.set_speed(255); execute(); return (*this); }
+    PairWheelControl& stop()             { right_wheel.set_speed(  0);       left_wheel.set_speed(  0); execute(); return (*this); }
+    PairWheelControl& right_turn()       { right_wheel.set_speed( 63);       left_wheel.set_speed(255); execute(); return (*this); }
+    PairWheelControl& right_rotate()     { right_wheel.set_speed(255, true); left_wheel.set_speed(255); execute(); return (*this); }
 
 private:
     void execute() const { left_wheel.execute(); right_wheel.execute(); }
@@ -82,15 +84,15 @@ PairWheelControl pair_wheel(5, 6, 9, 10);
 void setup()
 {
     Serial.begin(115200);
-    pair_wheel.initial(2);
+    pair_wheel.initial(1.15);
 }
 
 void loop()
 {
-    pair_wheel.stop();
-    delay(5000);
-    pair_wheel.full_speed_ahead();
-    delay(5000);
-    pair_wheel.right_turn();
-    delay(5000);
+    pair_wheel.stop().keep(5000);
+    pair_wheel.full_speed_ahead().keep(1000).right_rotate().keep(150);
+    pair_wheel.full_speed_ahead().keep( 500).right_rotate().keep(150);
+    pair_wheel.full_speed_ahead().keep(1000).right_rotate().keep(150);
+    pair_wheel.full_speed_ahead().keep( 500).right_rotate().keep(150);
+    pair_wheel.full_speed_ahead().keep( 500);
 }
