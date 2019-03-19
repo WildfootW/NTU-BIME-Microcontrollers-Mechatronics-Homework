@@ -77,26 +77,42 @@ private:
 
 #ifndef ROUTE_DETECTOR
 #define ROUTE_DETECTOR
-class IrSensor
+class BasicSensor
 {
 public:
-    IrSensor(byte pin): pin(pin) {}
+    BasicSensor(byte pin): pin(pin) {}
     void initial(uint16_t divide) { pinMode(pin, INPUT); divide_value = divide; }
-    bool target_detected() const
+    void value_update()
     {
-        uint16_t sensor_value = analogRead(pin);
-        Serial.println(sensor_value);
-        return sensor_value > divide_value;
+        unsigned int new_value = (mix_value * 9) + analogRead(pin);
+        mix_value = new_value / 10;
+        bool new_status = ( mix_value > divide_value );
+        if(new_value != current_status)
+        {
+            last_change_status_time = millis();
+            current_status = new_status;
+        }
     }
-private:
+    bool target_detected() const { return current_status; }
+    unsigned long get_last_change_status_time() const { return last_change_status_time; }
+protected:
+    bool current_status;
     const byte pin;
     uint16_t divide_value;
+    uint16_t mix_value;
+    unsigned long last_change_status_time;
+};
+class IrSensor: public BasicSensor
+{
+public:
+    IrSensor(byte pin): BasicSensor(pin) {}
 };
 class RouteDetector
 {
 public:
     RouteDetector(byte pin_l, byte pin_c, byte pin_r): sensor_l(pin_l), sensor_c(pin_c), sensor_r(pin_r) {}
     void initial(uint16_t divide) { sensor_l.initial(divide); sensor_c.initial(divide); sensor_r.initial(divide); }
+    void sensor_value_update() { sensor_l.value_update(); sensor_c.value_update(); sensor_r.value_update(); }
     int8_t get_suggest_action()
     {
         sensor_l.target_detected();
@@ -132,5 +148,6 @@ void loop()
     //pair_wheel.full_speed_ahead().keep(1000).right_rotate().keep(150);
     //pair_wheel.full_speed_ahead().keep( 500).right_rotate().keep(150);
     //pair_wheel.full_speed_ahead().keep( 500);
+    route_detector.sensor_value_update();
     route_detector.get_suggest_action();
 }
