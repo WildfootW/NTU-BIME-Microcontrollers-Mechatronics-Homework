@@ -11,6 +11,7 @@ LINK_CCCFLAGS=-Os -mmcu=${MCU_compiler} -ffunction-sections -fdata-sections -Wl,
 CCC=avr-gcc
 F_CPU=1200000
 
+# flash
 USB_PORT=/dev/ttyACM0
 MCU_dude=m328p
 OBJCOPY=avr-objcopy
