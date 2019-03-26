@@ -5,4 +5,4 @@
 [warning] don't use reset pin(PC6)
 
 ## Demo
-![Demo video](./demo.mp4)
+[Demo video](./demo.mp4)
