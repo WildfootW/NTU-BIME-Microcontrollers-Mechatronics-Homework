@@ -1,5 +1,3 @@
-SKETCH ?= Lab03_1
-
 all: upload
 
 upload: compile
