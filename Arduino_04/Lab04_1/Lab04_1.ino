@@ -2,7 +2,7 @@
  * Version 
  * Author: WildfootW
  * GitHub: github.com/WildfootW
- * Copyright (C) 2019 WildfootW All rights reserved.
+ * Copyrright (C) 2019 WildfootW All rrights reserved.
  *
  */
 
@@ -53,32 +53,32 @@ class PairWheelControl
 {
 public:
 #if with_enable_line
-    PairWheelControl(byte pin_a_left , byte pin_b_left,  byte pin_en_left,      // digital, digital, pwm
-                     byte pin_a_right, byte pin_b_right, byte pin_en_right):    // digital, digital, pwm
-                     left_wheel (pin_a_left,  pin_b_left,  pin_en_left),
-                     right_wheel(pin_a_right, pin_b_right, pin_en_right) {}
+    PairWheelControl(byte pin_a_llleft, byte pin_b_llleft, byte pin_en_llleft,      // digital, digital, pwm
+                     byte pin_a_rright, byte pin_b_rright, byte pin_en_rright):    // digital, digital, pwm
+                     llleft_wheel(pin_a_llleft, pin_b_llleft, pin_en_llleft),
+                     rright_wheel(pin_a_rright, pin_b_rright, pin_en_rright) {}
 #else
-    PairWheelControl(byte pin_a_left , byte pin_b_left,                         // pwm, pwm
-                     byte pin_a_right, byte pin_b_right):                       // pwm, pwm
-                     left_wheel (pin_a_left,  pin_b_left),
-                     right_wheel(pin_a_right, pin_b_right) {}
+    PairWheelControl(byte pin_a_llleft, byte pin_b_llleft,                         // pwm, pwm
+                     byte pin_a_rright, byte pin_b_rright):                       // pwm, pwm
+                     llleft_wheel(pin_a_llleft, pin_b_llleft),
+                     rright_wheel(pin_a_rright, pin_b_rright) {}
 #endif // with_enable_line
-    void initial(double speed_ratio = 1)    // speed_ratio = left_speed / right_speed;
+    void initial(double speed_ratio = 1)    // speed_ratio = llleft_speed / rright_speed;
     {
         global_ratio = 1;
-        if(speed_ratio > 1) { left_wheel.initial(1 / speed_ratio); right_wheel.initial(1);           }
-        else                { left_wheel.initial(1);               right_wheel.initial(speed_ratio); }
+        if(speed_ratio > 1) { llleft_wheel.initial(1 / speed_ratio); rright_wheel.initial(1);           }
+        else                { llleft_wheel.initial(1);               rright_wheel.initial(speed_ratio); }
     }
-    void set_speed(uint8_t left_speed, uint8_t right_speed, bool left_backward = false, bool right_backward = false) const
+    void set_speed(uint8_t llleft_speed, uint8_t rright_speed, bool llleft_backward = false, bool rright_backward = false) const
     {
-         left_wheel.set_speed( left_speed * global_ratio,  left_backward);
-        right_wheel.set_speed(right_speed * global_ratio, right_backward);
+        llleft_wheel.set_speed( llleft_speed * global_ratio,  llleft_backward);
+        rright_wheel.set_speed(rright_speed * global_ratio, rright_backward);
     }
     PairWheelControl& set_global_ratio(double ratio) { global_ratio = ratio ; return (*this); }
     PairWheelControl& keep(unsigned int time) { delay(time); return (*this); }
     PairWheelControl& full_speed_ahead() { set_speed(255, 255);               execute(); return (*this); }
     PairWheelControl& stop()             { set_speed(  0,   0);               execute(); return (*this); }
-    PairWheelControl& right_rotate()     { set_speed(255, 255, false, true);  execute(); return (*this); }
+    PairWheelControl& rright_rotate()     { set_speed(255, 255, false, true);  execute(); return (*this); }
     PairWheelControl& turn(int8_t steer_amount)
     {
         if(steer_amount == 0)
@@ -92,18 +92,18 @@ public:
     }
 
 private:
-    WheelControl left_wheel, right_wheel;
+    WheelControl llleft_wheel, rright_wheel;
     double global_ratio;
     void execute() const
     {
 #ifndef NDEBUG
-        Serial.print("left : ");
+        Serial.print("llleft : ");
 #endif // NDEBUG
-        left_wheel.execute();
+        llleft_wheel.execute();
 #ifndef NDEBUG
-        Serial.print("right: ");
+        Serial.print("rright: ");
 #endif // NDEBUG
-        right_wheel.execute();
+        rright_wheel.execute();
     }
 };
 #endif//WHEEL_CONTROL_H
@@ -142,11 +142,29 @@ protected:
     uint16_t mix_value;
     unsigned long last_change_status_time;
 };
-class IrSensor: public BasicSensor
+class IrSensorTCRT5000: public BasicSensor
 {
 public:
-    IrSensor(byte pin): BasicSensor(pin) {}
+    IrSensorTCRT5000(byte pin): BasicSensor(pin) {}
     void value_update() { Serial.print(" IR :"); BasicSensor::value_update(); }
+};
+class IrSensorSHARP: public SharpIR
+{
+public:
+    IrSensorSHARP(byte pin): SharpIR(GP2Y0A21YK0F, pin) {}
+    void initial() { pinMode(pin, INPUT); }
+    uint8_t get_distance() { return getDistance(); }
+};
+enum RouteStatusType
+{
+    llleft_unknown,
+    llleft_on_line,
+    center_unknown,
+    center_on_line,
+    rright_unknown,
+    rright_on_line,
+    route_type_timeout,
+    route_type_invalid,
 };
 class RouteDetector
 {
@@ -156,7 +174,7 @@ public:
     void sensor_value_update()
     {
 #ifndef NDEBUG
-        Serial.print("left  :");
+        Serial.print("llleft:");
 #endif // NDEBUG
         sensor_l.value_update();
 #ifndef NDEBUG
@@ -164,79 +182,65 @@ public:
 #endif // NDEBUG
         sensor_c.value_update();
 #ifndef NDEBUG
-        Serial.print("right :");
+        Serial.print("rright:");
 #endif // NDEBUG
         sensor_r.value_update();
-    }
-    int8_t get_suggest_action() // return from -127(right) ~ 127(left) and 128 for invalid
-    {
-        bool l = sensor_l.target_detected();
-        bool c = sensor_c.target_detected();
-        bool r = sensor_r.target_detected();
-        unsigned long l_t = sensor_l.get_last_change_status_time();
-        unsigned long c_t = sensor_c.get_last_change_status_time();
-        unsigned long r_t = sensor_r.get_last_change_status_time();
-        unsigned long current_t = millis();
-        int8_t ret = 0;
-        if(c)
+
+        uint8_t new_status_value = 0;
+        RouteStatusType new_status;
+        if(sensor_l.target_detected()) { new_status_value += 1; }
+        if(sensor_c.target_detected()) { new_status_value += 2; }
+        if(sensor_r.target_detected()) { new_status_value += 4; }
+        if(new_status_value == 0)
         {
-            ret = 0;
-            if(current_t - l_t < 2500)
-                ret = -40;
-            else if(current_t - r_t < 2500)
-                ret = 40;
+            if(current_status == llleft_unknown || current_status == center_unknown || current_status == rright_unknown)
+            {
+                new_status = current_status;
+            }
+            else if(current_status == llleft_on_line) { new_status = llleft_unknown; }
+            else if(current_status == center_on_line) { new_status = center_unknown; }
+            else if(current_status == rright_on_line) { new_status = rright_unknown; }
         }
-        else if(l)
-        {
-            if(current_t - c_t < 300)
-                ret = 60;
-            else
-                ret = 0;
-        }
-        else if(r)
-        {
-            if(current_t - c_t < 300)
-                ret = -60;
-            else
-                ret = 0;
-        }
+        else if(new_status_value == 1) { new_status = llleft_on_line; }
+        else if(new_status_value == 2) { new_status = center_on_line; }
+        else if(new_status_value == 3) { new_status = rright_on_line; }
         else
         {
-            if(l_t > r_t)
-                ret = 127;
-            else if(l_t < r_t)
-                ret = -127;
-            if(current_t - l_t > 1000 && current_t - c_t > 1000 && current_t - r_t > 1000)
-                ret = 128; // invalid
+            new_status = route_type_invalid;
         }
-        Serial.print("Suggest action: ");
-        Serial.println(ret);
-        return ret;
+        if(new_status != current_status)
+        {
+            last_change_status_time = millis();
+            last_status = current_status;
+            current_status = new_status;
+        }
     }
+    RouteStatusType get_current_status() const { return current_status; }
+    RouteStatusType get_last_status() const { return last_status; }
+    unsigned long get_last_change_status_time() const { return last_change_status_time; }
 private:
-    IrSensor sensor_l, sensor_c, sensor_r;
+    IrSensorTCRT5000 sensor_l, sensor_c, sensor_r;
+    RouteStatusType current_status, last_status;
+    unsigned long last_change_status_time;
 };
-class ObstacleDetector: public SharpIR
+class ObstacleDetector
 {
 public:
-    ObstacleDetector(byte pin): SharpIR(GP2Y0A21YK0F, pin) {}
+    ObstacleDetector(byte pin): obstacle_sensor(pin) {}
+    void initial() { obstacle_sensor.initial(); }
     void sensor_value_update()
     {
-        distance = getDistance();
+        distance = obstacle_sensor.get_distance();
 #ifndef NDEBUG
         Serial.print("Obstacle :");
         Serial.print(distance);
         Serial.println(" cm");
 #endif // NDEBUG
     }
-    void initial(uint8_t distance) { pinMode(pin, INPUT); divide_distance = distance; }
-    bool target_detected() const
-    {
-        return distance < divide_distance;
-    }
+    uint8_t get_distance() const { return distance; }
 private:
+    IrSensorSHARP obstacle_sensor;
     uint8_t distance;
-    uint8_t divide_distance;
 };
 
 #if with_enable_line
@@ -253,7 +257,7 @@ void setup()
     Serial.begin(115200);
     pair_wheel.initial(1);
     route_detector.initial(500, 100, 500);
-    obstacle_detector.initial(10);
+    obstacle_detector.initial();
     pair_wheel.set_global_ratio(1);
 }
 
@@ -262,13 +266,4 @@ void loop()
     //pair_wheel.full_speed_ahead();
     route_detector.sensor_value_update();
     obstacle_detector.sensor_value_update();
-
-    int8_t route_suggest_action = route_detector.get_suggest_action();
-    if(obstacle_detector.target_detected())
-        pair_wheel.stop();
-    else
-    {
-        //pair_wheel.set_global_ratio(1 - (route_suggest_action / 255));
-        pair_wheel.turn(route_suggest_action);
-    }
 }
