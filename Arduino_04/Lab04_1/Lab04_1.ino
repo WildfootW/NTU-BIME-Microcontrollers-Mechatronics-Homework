@@ -76,19 +76,25 @@ public:
     }
     PairWheelControl& set_global_ratio(double ratio) { global_ratio = ratio ; return (*this); }
     PairWheelControl& keep(unsigned int time) { delay(time); return (*this); }
-    PairWheelControl& full_speed_ahead() { set_speed(255, 255);               execute(); return (*this); }
-    PairWheelControl& stop()             { set_speed(  0,   0);               execute(); return (*this); }
-    PairWheelControl& rright_rotate()     { set_speed(255, 255, false, true);  execute(); return (*this); }
+
+    PairWheelControl& go(uint8_t speed_amount, bool backward = false)
+    {
+        if(!backward) { set_speed(speed_amount, speed_amount); }
+        else          { set_speed(speed_amount, speed_amount, true, true); }
+        execute(); return (*this);
+    }
+    PairWheelControl& rotate(uint8_t speed_amount, bool clockwise = false)
+    {
+        if(clockwise) set_speed(speed_amount, speed_amount, false, true);
+        else          set_speed(speed_amount, speed_amount, true, false);
+        execute(); return (*this);
+    }
     PairWheelControl& turn(int8_t steer_amount)
     {
-        if(steer_amount == 0)
-            set_speed(255, 255);
-        else if(steer_amount > 0)
-            set_speed(255 - (steer_amount * 2), 255);
-        else
-            set_speed(255, 255 + (steer_amount * 2));
-        execute();
-        return (*this);
+        if(steer_amount == 0) set_speed(255, 255);
+        if(steer_amount >  0) set_speed(255 - (steer_amount * 2), 255);
+        if(steer_amount <  0) set_speed(255, 255 + (steer_amount * 2));
+        execute(); return (*this);
     }
 
 private:
