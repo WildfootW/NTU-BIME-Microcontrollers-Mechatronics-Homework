@@ -25,7 +25,7 @@ const piano_key piano_keys[buttom_num] = {
     { 2, NOTE_B4},
 };
 
-unsigned int pressed_buttom_index; // [TODO] find out why declare this variable in loop() will make "if statement" failed
+//unsigned int pressed_buttom_index; // [TODO] find out why declare this variable in loop() will make "if statement" failed
 
 void setup()
 {
@@ -38,12 +38,10 @@ void setup()
 
 void loop()
 {
+    int pressed_buttom_index = -1;
     //unsigned int pressed_buttom_index;
-    for(unsigned int i = 0;i < buttom_num + 1;++i)
+    for(unsigned int i = 0;i < buttom_num;++i)
     {
-        if(i == buttom_num)
-            pressed_buttom_index = buttom_num;
-
         if(digitalRead(piano_keys[i].pin))
         {
             pressed_buttom_index = i;
@@ -52,7 +50,7 @@ void loop()
     }
 
     Serial.print(pressed_buttom_index);
-    if(pressed_buttom_index == buttom_num)
+    if(pressed_buttom_index == -1)
     {
         Serial.write(" No Tone\n");
         noTone(buzzer_pin);

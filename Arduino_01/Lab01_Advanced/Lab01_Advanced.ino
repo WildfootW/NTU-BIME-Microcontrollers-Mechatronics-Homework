@@ -17,40 +17,82 @@ http://www.arduino.cc/en/Tutorial/Tone
 
 #include "pitches.h"
 
-// notes in the melody:
-int melody[] = {
-    NOTE_C4, NOTE_C4, NOTE_G4, NOTE_G4, NOTE_A4, NOTE_A4, NOTE_G4, 0,
-    NOTE_F4, NOTE_F4, NOTE_E4, NOTE_E4, NOTE_D4, NOTE_D4, NOTE_C4, 0,
-    NOTE_G4, NOTE_G4, NOTE_F4, NOTE_F4, NOTE_E4, NOTE_E4, NOTE_D4, 0,
-    NOTE_G4, NOTE_G4, NOTE_F4, NOTE_F4, NOTE_E4, NOTE_E4, NOTE_D4, 0,
-    NOTE_C4, NOTE_C4, NOTE_G4, NOTE_G4, NOTE_A4, NOTE_A4, NOTE_G4, 0,
-    NOTE_F4, NOTE_F4, NOTE_E4, NOTE_E4, NOTE_D4, NOTE_D4, NOTE_C4, 0,
+
+class note
+{
+public:
+    note(int frequency, int duration): frequency(frequency), duration(duration) {}
+    int frequency, duration;
 };
 
+const int buzzer_pin = 8;
+
 // note durations: 4 = quarter note, 8 = eighth note, etc.:
-int noteDurations[] = {
-    4, 4, 4, 4, 4, 4, 4, 4,
-    4, 4, 4, 4, 4, 4, 4, 4,
-    4, 4, 4, 4, 4, 4, 4, 4,
-    4, 4, 4, 4, 4, 4, 4, 4,
-    4, 4, 4, 4, 4, 4, 4, 4,
-    4, 4, 4, 4, 4, 4, 4, 4,
+note melody[] = {
+    {NOTE_C4, 4},
+    {NOTE_C4, 4},
+    {NOTE_G4, 4},
+    {NOTE_G4, 4},
+    {NOTE_A4, 4},
+    {NOTE_A4, 4},
+    {NOTE_G4, 4},
+    {      0, 4},
+    {NOTE_F4, 4},
+    {NOTE_F4, 4},
+    {NOTE_E4, 4},
+    {NOTE_E4, 4},
+    {NOTE_D4, 4},
+    {NOTE_D4, 4},
+    {NOTE_C4, 4},
+    {      0, 4},
+    {NOTE_G4, 4},
+    {NOTE_G4, 4},
+    {NOTE_F4, 4},
+    {NOTE_F4, 4},
+    {NOTE_E4, 4},
+    {NOTE_E4, 4},
+    {NOTE_D4, 4},
+    {      0, 4},
+    {NOTE_G4, 4},
+    {NOTE_G4, 4},
+    {NOTE_F4, 4},
+    {NOTE_F4, 4},
+    {NOTE_E4, 4},
+    {NOTE_E4, 4},
+    {NOTE_D4, 4},
+    {      0, 4},
+    {NOTE_C4, 4},
+    {NOTE_C4, 4},
+    {NOTE_G4, 4},
+    {NOTE_G4, 4},
+    {NOTE_A4, 4},
+    {NOTE_A4, 4},
+    {NOTE_G4, 4},
+    {      0, 4},
+    {NOTE_F4, 4},
+    {NOTE_F4, 4},
+    {NOTE_E4, 4},
+    {NOTE_E4, 4},
+    {NOTE_D4, 4},
+    {NOTE_D4, 4},
+    {NOTE_C4, 4},
+    {      0, 4},
 };
 
 void setup()
 {
     // iterate over the notes of the melody:
-    for (int thisNote = 0; thisNote < 48; thisNote++)
+    for(int i = 0;i < 48;++i)
     {
         // to calculate the note duration, take one second divided by the note type.
         //e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
-        int noteDuration = 1000 / noteDurations[thisNote];
-        tone(8, melody[thisNote], noteDuration);
+        int length = 1000 / melody[i].duration;
+        tone(buzzer_pin, melody[i].frequency, length);
 
         // to distinguish the notes, set a minimum time between them.
         // the note's duration + 30% seems to work well:
-        int pauseBetweenNotes = noteDuration * 1.30;
-        delay(pauseBetweenNotes);
+        delay(length * 1.30);
+
         // stop the tone playing:
         noTone(8);
     }
