@@ -11,7 +11,7 @@
  */
 #ifndef WHEEL_CONTROL_H
 #define WHEEL_CONTROL_H
-#define with_enable_line 1
+#define with_enable_line 0
 class WheelControl
 {
 public:
@@ -84,15 +84,15 @@ PairWheelControl pair_wheel(5, 6, 9, 10);
 void setup()
 {
     Serial.begin(115200);
-    pair_wheel.initial(1.15);
+    pair_wheel.initial(1.05); // increase if deviation to the left
 }
 
 void loop()
 {
     pair_wheel.stop().keep(5000);
-    pair_wheel.full_speed_ahead().keep(1000).right_rotate().keep(150);
-    pair_wheel.full_speed_ahead().keep( 500).right_rotate().keep(150);
-    pair_wheel.full_speed_ahead().keep(1000).right_rotate().keep(150);
-    pair_wheel.full_speed_ahead().keep( 500).right_rotate().keep(150);
+    pair_wheel.full_speed_ahead().keep(2600).stop().keep(1000).right_rotate().keep(250);
+    pair_wheel.full_speed_ahead().keep(1300).stop().keep(1000).right_rotate().keep(250);
+    pair_wheel.full_speed_ahead().keep(2600).stop().keep(1000).right_rotate().keep(250);
+    pair_wheel.full_speed_ahead().keep(1300).stop().keep(1000).right_rotate().keep(250);
     pair_wheel.full_speed_ahead().keep( 500);
 }
