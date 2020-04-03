@@ -48,6 +48,7 @@ public:
         if(sensor_l.target_detected()) { new_status_value += 1; }
         if(sensor_c.target_detected()) { new_status_value += 2; }
         if(sensor_r.target_detected()) { new_status_value += 4; }
+
         if(new_status_value == 0)
         {
             if(current_status == llleft_unknown || current_status == center_unknown || current_status == rright_unknown)
@@ -60,7 +61,7 @@ public:
         }
         else if(new_status_value == 1) { new_status = llleft_on_line; }
         else if(new_status_value == 2) { new_status = center_on_line; }
-        else if(new_status_value == 3) { new_status = rright_on_line; }
+        else if(new_status_value == 4) { new_status = rright_on_line; }
         else
         {
             new_status = route_type_invalid;
