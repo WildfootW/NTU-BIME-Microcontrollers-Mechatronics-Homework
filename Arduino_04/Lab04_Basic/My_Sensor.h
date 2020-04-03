@@ -50,7 +50,13 @@ class IrSensorTCRT5000: public BasicSensor
 {
 public:
     IrSensorTCRT5000(byte pin): BasicSensor(pin) {}
-    void value_update() { Serial.print(" IR :"); BasicSensor::value_update(); }
+    void value_update()
+    {
+#ifndef NDEBUG
+        Serial.print(" IR :");
+#endif // NDEBUG
+        BasicSensor::value_update();
+    }
 };
 class IrSensorSHARP: public SharpIR
 {

@@ -14,6 +14,6 @@
 #define with_enable_line 0
 
 // whether print DEBUG message or not
-#define NDEBUG 0
+//#define NDEBUG
 
 #endif //SETTING_H

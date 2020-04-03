@@ -6,7 +6,7 @@
  *
  */
 
-
+#include "Setting.h"
 #include "Wheel_Control.h"
 #include "RouteDetector.h"
 #include "ObstacleDetector.h"
@@ -14,7 +14,7 @@
 // with enable line
 //PairWheelControl pair_wheel(7, 8, 9, 13, 12, 11);
 // without enable line
-PairWheelControl pair_wheel(5, 6, 9, 10);
+PairWheelControl pair_wheel(5, 6, 10, 11);
 
 RouteDetector route_detector(A1, A2, A3);
 ObstacleDetector obstacle_detector(A0);
@@ -30,6 +30,7 @@ void setup()
 
 void loop()
 {
+
     //pair_wheel.full_speed_ahead();
     route_detector.sensor_value_update();
     obstacle_detector.sensor_value_update();
