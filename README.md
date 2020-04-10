@@ -23,3 +23,10 @@ compile:
 
 clean:
 ```
+
+# AVR
+```
+sudo apt install gcc-avr binutils-avr avr-libc
+sudo apt install gdb-avr
+sudo apt install avrdude
+```
