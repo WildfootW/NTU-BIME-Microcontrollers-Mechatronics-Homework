@@ -23,6 +23,22 @@ enum RouteStatusType
     route_type_timeout,
     route_type_invalid,
 };
+#ifndef NDEBUG
+String route_status_to_str(const RouteStatusType type)
+{
+    switch(type)
+    {
+        case llleft_unknown: return "llleft_unknown";
+        case llleft_on_line: return "llleft_on_line";
+        case center_unknown: return "center_unknown";
+        case center_on_line: return "center_on_line";
+        case rright_unknown: return "rright_unkonwn";
+        case rright_on_line: return "rright_on_line";
+        case route_type_timeout: return "route_type_timeout";
+        case route_type_invalid: return "route_type_invalid";
+    }
+}
+#endif // NDEBUG
 class RouteDetector
 {
 public:
@@ -72,6 +88,10 @@ public:
             last_status = current_status;
             current_status = new_status;
         }
+#ifndef NDEBUG
+        Serial.print(route_status_to_str(current_status) + " ");
+        Serial.println(last_change_status_time);
+#endif // NDEBUG
     }
     RouteStatusType get_current_status() const { return current_status; }
     RouteStatusType get_last_status() const { return last_status; }
