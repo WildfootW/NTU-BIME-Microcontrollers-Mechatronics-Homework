@@ -24,9 +24,19 @@ compile:
 clean:
 ```
 
-# AVR
+# AVR-C
+## Tools
 ```
 sudo apt install gcc-avr binutils-avr avr-libc
 sudo apt install gdb-avr
 sudo apt install avrdude
 ```
+
+## Makefile
+
+## Library
+* References
+    * jypma
+        * [AvrLib](https://github.com/jypma/AvrLib)
+        * [AvrLibDemo](https://github.com/jypma/AvrLibDemo)
+    * [Electronics - C++ classes for I/O pin abstraction](https://electronics.stackexchange.com/questions/19057/c-classes-for-i-o-pin-abstraction)
