@@ -40,3 +40,4 @@ sudo apt install avrdude
         * [AvrLib](https://github.com/jypma/AvrLib)
         * [AvrLibDemo](https://github.com/jypma/AvrLibDemo)
     * [Electronics - C++ classes for I/O pin abstraction](https://electronics.stackexchange.com/questions/19057/c-classes-for-i-o-pin-abstraction)
+    * [Objects? No, thanks! (Using C++ effectively on small systems)](https://www.embedded.com/objects-no-thanks-using-c-effectively-on-small-systems/)
