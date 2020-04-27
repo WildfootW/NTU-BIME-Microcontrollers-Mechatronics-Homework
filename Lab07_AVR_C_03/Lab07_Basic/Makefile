@@ -6,30 +6,28 @@
 
 # compile
 MCU_compiler=atmega328p
-COMPILE_CCCFLAGS=-c -std=c99 -Wall -Os -ffunction-sections -fdata-sections -mmcu=${MCU_compiler} -F_CPU=${F_CPU}
+COMPILE_CCCFLAGS=-c -std=c11 -Wall -Os -ffunction-sections -fdata-sections -mmcu=${MCU_compiler} -DF_CPU=${F_CPU}
 LINK_CCCFLAGS=-Os -mmcu=${MCU_compiler} -ffunction-sections -fdata-sections -Wl,--gc-sections
 CCC=avr-gcc
-F_CPU=1200000
+F_CPU=1000000UL
 
 # flash
-USB_PORT=/dev/ttyACM0
+USB_PORT=/dev/ttyS5
 MCU_dude=m328p
 OBJCOPY=avr-objcopy
 PROGRAMMER=stk500v1 # ArduinoISP
 PROGRAMMER_BAUD=19200 # 19200 for ArduinoISP stk500v1
 
-TARGET=main
-OBJ := main.o
+TARGET=main ADConvert
+OBJ := main.o ADConvert.o
 
 all: link flash
 
 link: $(OBJ)
 	$(CCC) ${LINK_CCCFLAGS} $^ -o ${TARGET}.elf
 
-
 $(OBJ): %.o: %.c
 	${CCC} ${COMPILE_CCCFLAGS} $< -o $@
-	
 
 flash:
 	${OBJCOPY} -O ihex -R .eeprom ${TARGET}.elf ${TARGET}.ihex
