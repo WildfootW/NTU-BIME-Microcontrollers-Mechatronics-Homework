@@ -6,15 +6,15 @@
  *
  */
 
-#ifndef Usart
-#define Usart
-
+#ifndef UASRT_H
+#define USART_H
 typedef struct Usart
 {
-    uint8_t baud_rate;
+    uint16_t baud_rate;
 }Usart;
-void Usart__init(Usart* self, uint8_t baud_rate);
+typedef struct Usart Usart;
+void Usart__init(Usart* self, uint16_t baud_rate);
 void Usart__put_string(Usart* self, char* str_ptr);
 
-#endif // Usart
+#endif // USART_H
 

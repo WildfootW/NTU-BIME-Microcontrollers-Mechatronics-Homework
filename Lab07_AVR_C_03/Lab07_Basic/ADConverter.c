@@ -7,6 +7,7 @@
  */
 
 #include <avr/io.h>
+#include "ADConverter.h"
 
 void ADConverter__init(ADConverter* self)
 {

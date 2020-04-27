@@ -52,20 +52,20 @@ int main(void)
 {
     initial();
     ADConverter adc;
-    ADConverter__init(*adc);
+    ADConverter__init(&adc);
     Usart usart;
-    Usart__init(*usart, 9600);
+    Usart__init(&usart, 9600);
     uint16_t distance_raw = 0;
     while(1)
     {
-        ADConverter__start(*adc);
-        distance_raw = (distance_raw * 9 + ADConverter__read(*adc)) / 10;
+        ADConverter__start(&adc);
+        distance_raw = (distance_raw * 9 + ADConverter__read(&adc)) / 10;
         uint8_t distance_cm = distance_raw_to_cm(distance_raw);
 
         // usart
         char buffer[10];
         itoa(distance_raw, buffer, 10);
-        Usart__put_string(*usart, buffer);
+        Usart__put_string(&usart, buffer);
 
         // print centimeter to 7 segement LED
         PORTB = ~seven_segement_graph[distance_cm / 10];

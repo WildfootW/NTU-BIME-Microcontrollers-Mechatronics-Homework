@@ -9,7 +9,7 @@
 #include <avr/io.h>
 #include "Usart.h"
 
-void Usart__init(Usart* self, uint8_t baud_rate)
+void Usart__init(Usart* self, uint16_t baud_rate)
 {
     self->baud_rate = baud_rate;
     // setup baud rate
@@ -29,7 +29,7 @@ void Usart__put_string(Usart* self, char* str_ptr)
     {
         while(!(UCSR0A & (1 << UDRE0))); // Usart Data Register Empty
         UDR0 = *str_ptr; // shift register
-        ++str_ptr
+        ++str_ptr;
     }
 }
 

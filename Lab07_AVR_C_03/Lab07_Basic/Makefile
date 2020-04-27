@@ -18,15 +18,15 @@ OBJCOPY=avr-objcopy
 PROGRAMMER=stk500v1 # ArduinoISP
 PROGRAMMER_BAUD=19200 # 19200 for ArduinoISP stk500v1
 
-TARGET=main ADConvert
-OBJ := main.o ADConvert.o
+TARGET=main
+OBJS := main.o ADConverter.o Usart.o
 
 all: link flash
 
-link: $(OBJ)
+link: $(OBJS)
 	$(CCC) ${LINK_CCCFLAGS} $^ -o ${TARGET}.elf
 
-$(OBJ): %.o: %.c
+$(OBJS): %.o: %.c
 	${CCC} ${COMPILE_CCCFLAGS} $< -o $@
 
 flash:
