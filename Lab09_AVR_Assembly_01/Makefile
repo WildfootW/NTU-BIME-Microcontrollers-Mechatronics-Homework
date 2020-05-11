@@ -28,7 +28,7 @@ all: link flash
 link: $(OBJS)
 	$(CCC) ${LINK_CCCFLAGS} $^ -o ${TARGET}.elf
 
-%.o: %.s
+%.o: %.S
 	${CCC} ${COMPILE_CCCFLAGS} $< -o $@
 
 .PHONY: flash

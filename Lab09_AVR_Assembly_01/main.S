@@ -1,4 +1,6 @@
- .file "main.s"
+#define __SFR_OFFSET 0
+#include <avr/io.h>
+
 __SP_H__ = 0x3e
 __SP_L__ = 0x3d
 __SREG__ = 0x3f
@@ -9,13 +11,9 @@ __zero_reg__ = 1
 .global init
  .type init, @function
 init:
-/* prologue: function */
-/* frame size = 0 */
-/* stack size = 0 */
-.L__stack_usage = 0
     ldi r24,lo8(-1)
-    out 0x4,r24
-    out 0xa,r24
+    out DDRB,r24
+    out DDRD,r24
     ret
  .size init, .-init
 
@@ -23,14 +21,10 @@ init:
 .global print_seven_segement
  .type print_seven_segement, @function
 print_seven_segement:
-/* prologue: function */
-/* frame size = 0 */
-/* stack size = 0 */
-.L__stack_usage = 0
-    com r24
-    out 0xb,r24
     com r22
-    out 0x5,r22
+    out PORTB,r22
+    com r24
+    out PORTD,r24
     ret
  .size print_seven_segement, .-print_seven_segement
 
@@ -38,10 +32,6 @@ print_seven_segement:
 .global main
  .type main, @function
 main:
-/* prologue: function */
-/* frame size = 0 */
-/* stack size = 0 */
-.L__stack_usage = 0
     call init
 .L6:
     ldi r28,lo8(character_array)
@@ -93,6 +83,5 @@ character_array:
     .byte 111
     .byte 0
     .zero 6
- .ident "GCC: (GNU) 5.4.0"
 
 .global __do_copy_data
