@@ -69,7 +69,7 @@ main:
 .global character_array
  .section .rodata.character_array,"a",@progbits
  .type character_array, @object
- .size character_array, 17
+ .size character_array, 11
 character_array:
     .byte 63
     .byte 6
@@ -82,6 +82,5 @@ character_array:
     .byte 127
     .byte 111
     .byte 0
-    .zero 6
 
 .global __do_copy_data

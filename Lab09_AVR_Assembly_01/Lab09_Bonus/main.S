@@ -1,3 +1,6 @@
+#define __SFR_OFFSET 0
+#include <avr/io.h>
+
 __SP_H__ = 0x3e
 __SP_L__ = 0x3d
 __SREG__ = 0x3f
@@ -13,8 +16,8 @@ init:
 /* stack size = 0 */
 .L__stack_usage = 0
     ldi r24,lo8(-1)
-    out 0x4,r24
-    out 0xa,r24
+    out DDRB,r24
+    out DDRD,r24
     ldi r30,lo8(-127)
     ldi r31,0
     ld r24,Z
@@ -22,8 +25,8 @@ init:
     st Z,r24
     ldi r24,lo8(-24)
     ldi r25,lo8(3)
-    sts 136+1,r25
-    sts 136,r24
+    sts OCR1AH,r25
+    sts OCR1AL,r24
     ldi r30,lo8(111)
     ldi r31,0
     ld r24,Z
@@ -42,7 +45,7 @@ print_seven_segement:
 /* stack size = 0 */
 .L__stack_usage = 0
     com r24
-    out 0x5,r24
+    out PORTB,r24
     ret
     .size print_seven_segement, .-print_seven_segement
 
@@ -98,7 +101,7 @@ print_multiplexed_seven_segement:
     2:
     dec r0
     brpl 1b
-    out 0xb,r24
+    out PORTD,r24
     movw r24,r30
     call __udivmodhi4
     movw r24,r22
@@ -109,14 +112,14 @@ print_multiplexed_seven_segement:
     sbci r27,hi8(-(character_array))
     ld r24,X
     com r24
-    out 0x5,r24
+    out PORTB,r24
     ldi r24,lo8(1999)
     ldi r25,hi8(1999)
 1: sbiw r24,1
     brne 1b
     rjmp .
     nop
-    out 0x5,r15
+    out PORTB,r15
 .L6:
     subi r18,-1
     sbci r19,-1

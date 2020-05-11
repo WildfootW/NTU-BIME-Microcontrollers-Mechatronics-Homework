@@ -22,7 +22,7 @@ void print_seven_segement(uint8_t graph_a, uint8_t graph_b)
     PORTB = ~graph_b;
 }
 
-const uint8_t character_array[17] = {
+const uint8_t character_array[11] = {
     //PGFEDCBA
     0b00111111, // 0
     0b00000110, // 1
