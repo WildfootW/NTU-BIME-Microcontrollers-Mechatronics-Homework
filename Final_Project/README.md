@@ -1,7 +1,8 @@
 # Final Project
 
 ## Plan
-### I/O Port
+### Architecture
+#### I/O Port
 * Serial
     * PD1 (TXD)
 * Wheel
@@ -16,6 +17,15 @@
     * PC3 (ADC3)
 
 ### Workflow
+
+### Framework
+#### Files
+* main.cpp
+* Setting.h
+* RouteDetector.h
+* ObstacleDetector.h
+* MySensor.h
+* WheelControl.h
 
 ## Problemshooting
 
