@@ -83,6 +83,10 @@ asm: $(ASMS)
 	${CCC} ${COMPILE_ASM_CCCFLAGS} $< -o $@
 ```
 
+### avrdude
+* `-U flash|eeprom|hfuse|lfuse|efuse:r|w|v:<filename>[:format]:`
+    * `-U flash:w:main.ihex:i`
+
 ## Library
 * References
     * jypma

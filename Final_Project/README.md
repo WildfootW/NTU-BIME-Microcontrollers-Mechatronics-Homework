@@ -1,5 +1,15 @@
 # Final Project
 
+## Makefile
+* link
+    * compile & link
+* flash
+    * copy elf to ihex
+    * write ihex file to flash via avrdude
+* size
+    * list section sizes and total size
+* clean
+
 ## Plan
 ### Architecture
 #### I/O Port
