@@ -44,11 +44,11 @@
 
 ## Problemshooting
 ### Register Data Type
-"""c
+```c
 #define _MMIO_BYTE(mem_addr) (*(volatile uint8_t *)(mem_addr))
 #define _SFR_MEM8(mem_addr) _MMIO_BYTE(mem_addr)
 #define PINB _SFR_IO8(0x03)
-"""
+```
 
 ## TODO
 * how to read multiple ADC input
