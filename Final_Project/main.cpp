@@ -6,8 +6,15 @@
  *
  */
 
+
+void initial()
+{
+
+}
+
 int main(void)
 {
+    initial();
 
 }
 

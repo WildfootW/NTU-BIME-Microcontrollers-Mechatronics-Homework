@@ -9,9 +9,6 @@
 #ifndef OBSTACLEDETECTOR_H
 #define OBSTACLEDETECTOR_H
 
-#include "Setting.h"
-#include "My_Sensor.h"
-
 class ObstacleDetector
 {
 public:

@@ -6,11 +6,8 @@
  *
  */
 
-#ifndef MY_SENSOR_H
-#define MY_SENSOR_H
-
-#include "Setting.h"
-#include "SharpIR.h"
+#ifndef MYSENSOR_H
+#define MYSENSOR_H
 
 class BasicSensor
 {
@@ -66,4 +63,4 @@ public:
     uint8_t get_distance() { return getDistance(); }
 };
 
-#endif //MY_SENSOR_H
+#endif //MYSENSOR_H
