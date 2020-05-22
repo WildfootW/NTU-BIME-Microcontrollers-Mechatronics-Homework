@@ -1,21 +1,29 @@
 /*
- * Version
+ * WheelControl.hpp
  * Author: WildfootW
  * GitHub: github.com/WildfootW
  * Copyleft (C) 2019-2020 WildfootW all rights reversed
- *
  */
 
-#ifndef WHEELCONTROL_H
-#define WHEELCONTROL_H
+#ifndef WHEELCONTROL_HPP
+#define WHEELCONTROL_HPP
 /*
  * class design for Arduino uno & L298 H-bridge controling two DC motor wheels.
  */
+#include "AVRUtils.hpp"
+
+template<class pin_a, class pin_b, uint8_t output_compare_register> // digital, digital, pwm
 class SingleWheelControl
 {
 public:
-    SingleWheelControl(byte pin_a, byte pin_b, byte pin_en): pin_a(pin_a), pin_b(pin_b), pin_en(pin_en) {} // digital, digital, pwm
-    void initial(double ratio = 1) { pinMode(pin_a, OUTPUT); pinMode(pin_b, OUTPUT); pinMode(pin_en, OUTPUT); output_ratio = ratio; }
+    SingleWheelControl(){}
+    void initial(double ratio = 1)
+    {
+        pinMode(pin_a, OUTPUT);
+        pinMode(pin_b, OUTPUT);
+        pinMode(pin_en, OUTPUT);
+        output_ratio = ratio;
+    }
     void set_speed(uint8_t speed, bool backward = false) { forward = !backward; current_speed = speed * output_ratio; }
     void execute() const
     {
@@ -37,10 +45,7 @@ private:
 class WheelControl
 {
 public:
-    WheelControl(byte pin_a_llleft, byte pin_b_llleft, byte pin_en_llleft,      // digital, digital, pwm
-                     byte pin_a_rright, byte pin_b_rright, byte pin_en_rright):    // digital, digital, pwm
-                     llleft_wheel(pin_a_llleft, pin_b_llleft, pin_en_llleft),
-                     rright_wheel(pin_a_rright, pin_b_rright, pin_en_rright) {}
+    WheelControl(){}
     void initial(double speed_ratio = 1)    // speed_ratio = llleft_speed / rright_speed;
     {
         global_ratio = 1;
@@ -76,7 +81,8 @@ public:
     }
 
 private:
-    SingleWheelControl llleft_wheel, rright_wheel;
+    SingleWheelControl<pin_PD3, pin_PD4, pin_PD5, OCR0B> llleft_wheel;
+    SingleWheelControl<pin_PD2, pin_PD7, pin_PD6, OCR0A> rright_wheel;
     double global_ratio;
     void execute() const
     {
@@ -90,5 +96,5 @@ private:
         rright_wheel.execute();
     }
 };
-#endif //WHEELCONTROL_H
+#endif //WHEELCONTROL_HPP
 
