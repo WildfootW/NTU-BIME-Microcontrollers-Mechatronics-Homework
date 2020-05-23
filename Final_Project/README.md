@@ -50,6 +50,22 @@
 #define PINB _SFR_IO8(0x03)
 ```
 
+### constexpr reference to avr port address
+```
+In file included from /usr/lib/avr/include/avr/io.h:99:0,
+                 from AVRUtils.hpp:14,
+                 from main.cpp:8:
+AVRUtils.hpp:70:41: error: expression ‘*37u’ has side-effects
+ using pin_PB0 = AVRIOPin<AVRRegisterBit<PORTB, PORTB0>, AVRRegisterBit<DDRB, DDB0>, AVRRegisterBit<PINB, PINB0>>;
+                                         ^
+In file included from main.cpp:8:0:
+AVRUtils.hpp:70:54: error: ‘*37u’ is not a constant expression
+ using pin_PB0 = AVRIOPin<AVRRegisterBit<PORTB, PORTB0>, AVRRegisterBit<DDRB, DDB0>, AVRRegisterBit<PINB, PINB0>>;
+                                                      ^
+```
+I need to use struct `AVR_REGISTER_DDRD` packing `DDRD` while as template argument.
+* [stackoverflow - constexpr reference to avr port address](https://stackoverflow.com/questions/41077173/constexpr-reference-to-avr-port-address)
+
 ## TODO
 * how to read multiple ADC input
 

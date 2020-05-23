@@ -23,11 +23,11 @@ OBJDUMP             := avr-objdump
 AVRSIZE             := avr-size
 AVRDUDE             := avrdude
 
-CXXFLAGS_COMPILE    := -c -std=c++14 -Wall -Os -ffunction-sections -fdata-sections -mmcu=${COMPILE_MCU} -F_CPU=${F_CPU}
+CXXFLAGS_COMPILE    := -c -std=c++11 -Wall -Os -ffunction-sections -fdata-sections -mmcu=${COMPILE_MCU} -DF_CPU=${F_CPU} -DNDEBUG
 CXXFLAGS_LINK       := -Os -mmcu=${COMPILE_MCU} -ffunction-sections -fdata-sections -Wl,--gc-sections
 
 .PHONY: all
-all: link flash
+all: link size flash
 
 .PHONY: link
 link: $(SRCOBJS)
