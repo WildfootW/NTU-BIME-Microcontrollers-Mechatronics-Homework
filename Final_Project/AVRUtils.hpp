@@ -14,6 +14,9 @@ extern "C"
     #include <avr/io.h>
 }
 
+/*
+ * AVR Register
+ */
 struct AVR_Register_PORTB
 {
     constexpr static volatile uint8_t *const addr() { return &PORTB; }
@@ -58,6 +61,7 @@ struct AVR_Register_OCR0B
 {
     constexpr static volatile uint8_t *const addr() { return &OCR0B; }
 };
+
 template<class name, uint8_t bit>
 class AVRRegisterBit
 {
@@ -76,7 +80,11 @@ public:
         return *addr & mask;
     }
 };
-enum class AVRIOPinMode
+
+/*
+ * AVR IO Pin
+ */
+enum class AVRIOPinMode: uint8_t
 {
     Output,
     Input,
