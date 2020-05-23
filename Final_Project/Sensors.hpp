@@ -6,8 +6,8 @@
  *
  */
 
-#ifndef MYSENSOR_H
-#define MYSENSOR_H
+#ifndef SENSORS_H
+#define SENSORS_H
 
 class BasicSensor
 {
@@ -55,7 +55,7 @@ public:
         BasicSensor::value_update();
     }
 };
-class IrSensorSHARP: public SharpIR
+class IrSensor2Y0A21: public BasicSensor
 {
 public:
     IrSensorSHARP(byte pin): SharpIR(GP2Y0A21YK0F, pin) {}
@@ -63,4 +63,4 @@ public:
     uint8_t get_distance() { return getDistance(); }
 };
 
-#endif //MYSENSOR_H
+#endif //SENSORS_H
