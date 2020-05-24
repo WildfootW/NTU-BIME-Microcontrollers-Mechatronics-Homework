@@ -6,11 +6,12 @@
 
 COMPILE_MCU         := atmega328p
 DUDE_MCU            := m328p
-DUDE_USB_PORT       := /dev/ttyS6 # Your Serial Port
+DUDE_USB_PORT       := /dev/ttyS8 # Your Serial Port
 PROGRAMMER          := stk500v1 # ArduinoISP
 PROGRAMMER_BAUD     := 19200 # 19200 for ArduinoISP stk500v1
 
 F_CPU               := 1000000UL
+#F_CPU               := 8000000UL
 TARGET              := main
 #SRCS                := main Setting MySensor ObstacleDetector RouteDetector WheelControl
 SRCS                := main

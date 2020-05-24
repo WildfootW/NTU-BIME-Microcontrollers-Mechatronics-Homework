@@ -7,11 +7,17 @@
 
 #include <avr/interrupt.h>
 #include "AVRUtils.hpp"
-#include "ADConverter.hpp"
-#include "Millis.hpp"
 
-ADConverter ad_converter; // PC0, 1, 2, 3
+/*
+#include "Usart.hpp"
+Usart usart(9600);
+*/
+
+#include "Millis.hpp"
 Millis millis; // Timer1
+
+#include "ADConverter.hpp"
+ADConverter ad_converter; // PC0, 1, 2, 3
 
 #include "Sensors.hpp"
 #include "RouteDetector.hpp"
@@ -25,11 +31,15 @@ IrSensorTCRT5000 sensor_c; // PC2
 IrSensorTCRT5000 sensor_r; // PC3
 RouteDetector routedetector(&sensor_l, &sensor_c, &sensor_r);
 ObstacleDetector obstacledetector(&sensor_o);
+#include "SevenSegment.hpp"
+SevenSegment sevensegment;
 
 void initial()
 {
+    sevensegment.print(SevenSegmentGraph::off);
     CLKPR = (1 << CLKPCE);
     CLKPR = 0b00000011; // set clk to 1 Mhz
+    //CLKPR = 0b00000000; // set clk to 8 Mhz
 
     sei();
     ad_converter.initial();
@@ -39,27 +49,70 @@ void initial()
     pin_PC4::configure_pin_mode(AVRIOPinMode::Input);
 
     millis.initial();
+    /*
+    usart.initial();
+    */
 
     wheel_control.initial();
 
-    sensor_l.initial(350);
+    sensor_l.initial(200);
     sensor_c.initial(150);
-    sensor_r.initial(500);
+    sensor_r.initial(230);
 
     obstacledetector.initial();
     routedetector.initial();
+
+    sevensegment.initial();
 }
 
 int main(void)
 {
     initial();
 
+    ad_converter.start();
+
+    /*
     while(true)
     {
+        char hello[] = "Hello World!\n";
+        usart.put_str(hello);
+    }
+    */
+
+    while(true)
+    {
+        routedetector.update_status();
         RouteStatusType current_status = routedetector.get_current_status();
-        if(current_status == RouteStatusType::center_on_line)
+        switch(current_status)
         {
-            wheel_control.go(255);
+            case RouteStatusType::center_on_line:
+                wheel_control.go(255);
+                sevensegment.print(SevenSegmentGraph::number_2);
+                break;
+            case RouteStatusType::llleft_on_line:
+                wheel_control.turn(50);
+                sevensegment.print(SevenSegmentGraph::number_1);
+                break;
+            case RouteStatusType::center_unknown:
+                wheel_control.go(155);
+                sevensegment.print(SevenSegmentGraph::number_5);
+                break;
+            case RouteStatusType::rright_unknown:
+                wheel_control.turn(-120);
+                sevensegment.print(SevenSegmentGraph::number_6);
+                break;
+            case RouteStatusType::llleft_unknown:
+                wheel_control.turn(120);
+                sevensegment.print(SevenSegmentGraph::number_4);
+                break;
+            case RouteStatusType::rright_on_line:
+                wheel_control.turn(-50);
+                sevensegment.print(SevenSegmentGraph::number_3);
+                break;
+            case RouteStatusType::invalid:
+                wheel_control.go(100);
+                sevensegment.print(SevenSegmentGraph::number_7);
+                break;
         }
     }
 }

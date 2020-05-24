@@ -62,7 +62,7 @@ public:
     void initial(double speed_ratio = 1)    // speed_ratio = llleft_speed / rright_speed;
     {
         TCCR0A = 0b10100011; // fast PWM, non-inverted
-        TCCR0B = 0b00000101; // timer prescaler ( clk / 1024 )
+        TCCR0B = 0b00000011; // timer prescaler ( clk / 64 )
         global_ratio = 1;
         if(speed_ratio > 1)
         {

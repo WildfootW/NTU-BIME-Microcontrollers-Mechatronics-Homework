@@ -46,7 +46,7 @@ public:
     void update_status()
     {
         uint8_t new_status_value = 0;
-        RouteStatusType new_status;
+        RouteStatusType new_status = RouteStatusType::invalid;
         if(sensor_l->target_detected()) { new_status_value += 1; }
         if(sensor_c->target_detected()) { new_status_value += 2; }
         if(sensor_r->target_detected()) { new_status_value += 4; }
