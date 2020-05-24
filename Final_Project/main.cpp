@@ -5,13 +5,26 @@
  * Copyleft (C) 2020 WildfootW all rights reversed
  */
 
+#include <avr/interrupt.h>
 #include "AVRUtils.hpp"
 #include "ADConverter.hpp"
+#include "Millis.hpp"
+
+ADConverter ad_converter; // PC0, 1, 2, 3
+Millis millis; // Timer1
+
+#include "Sensors.hpp"
+#include "RouteDetector.hpp"
+#include "ObstacleDetector.hpp"
 #include "WheelControl.hpp"
-#include <avr/interrupt.h>
 
 WheelControl wheel_control; // PD3, 4, 5. PD2, 7, 6. Timer0
-ADConverter ad_converter;
+IrSensor2Y0A21 sensor_o; // PC0
+IrSensorTCRT5000 sensor_l; // PC1
+IrSensorTCRT5000 sensor_c; // PC2
+IrSensorTCRT5000 sensor_r; // PC3
+RouteDetector routedetector(&sensor_l, &sensor_c, &sensor_r);
+ObstacleDetector obstacledetector(&sensor_o);
 
 void initial()
 {
@@ -19,10 +32,22 @@ void initial()
     CLKPR = 0b00000011; // set clk to 1 Mhz
 
     sei();
+    ad_converter.initial();
+    pin_PC1::configure_pin_mode(AVRIOPinMode::Input);
+    pin_PC2::configure_pin_mode(AVRIOPinMode::Input);
+    pin_PC3::configure_pin_mode(AVRIOPinMode::Input);
+    pin_PC4::configure_pin_mode(AVRIOPinMode::Input);
+
+    millis.initial();
 
     wheel_control.initial();
-    ad_converter.initial();
 
+    sensor_l.initial(350);
+    sensor_c.initial(150);
+    sensor_r.initial(500);
+
+    obstacledetector.initial();
+    routedetector.initial();
 }
 
 int main(void)
@@ -57,4 +82,8 @@ ISR(ADC_vect)
     }
     ad_converter.clear_interrupt_flag();
     ad_converter.start();
+}
+ISR(TIMER1_COMPA_vect)
+{
+    millis.increase_millis();
 }

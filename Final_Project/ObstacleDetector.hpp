@@ -6,27 +6,19 @@
  *
  */
 
-#ifndef OBSTACLEDETECTOR_H
-#define OBSTACLEDETECTOR_H
+#ifndef OBSTACLEDETECTOR_HPP
+#define OBSTACLEDETECTOR_HPP
+
+#include "Sensors.hpp"
 
 class ObstacleDetector
 {
 public:
-    ObstacleDetector(byte pin): obstacle_sensor(pin) {}
-    void initial() { obstacle_sensor.initial(); }
-    void sensor_value_update()
-    {
-        distance = obstacle_sensor.get_distance();
-#ifndef NDEBUG
-        Serial.print("Obstacle :");
-        Serial.print(distance);
-        Serial.println(" cm");
-#endif // NDEBUG
-    }
-    uint8_t get_distance() const { return distance; }
+    ObstacleDetector(IrSensor2Y0A21* sensor_o): sensor_o(sensor_o){}
+    void initial(){}
+    uint8_t get_distance() const { return sensor_o->get_distance(); }
 private:
-    IrSensorSHARP obstacle_sensor;
-    uint8_t distance;
+    IrSensor2Y0A21* sensor_o;
 };
 
-#endif //OBSTACLEDETECTOR_H
+#endif //OBSTACLEDETECTOR_HPP
