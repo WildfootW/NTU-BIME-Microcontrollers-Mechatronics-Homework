@@ -19,8 +19,8 @@ enum class RouteStatusType
     center_on_line,
     rright_unknown,
     rright_on_line,
-    route_type_timeout,
-    route_type_invalid,
+    timeout,
+    invalid
 };
 #ifndef NDEBUG
 String route_status_to_str(const RouteStatusType type)
@@ -33,8 +33,8 @@ String route_status_to_str(const RouteStatusType type)
         case RouteStatusType::center_on_line: return "center_on_line";
         case RouteStatusType::rright_unknown: return "rright_unkonwn";
         case RouteStatusType::rright_on_line: return "rright_on_line";
-        case RouteStatusType::route_type_timeout: return "route_type_timeout";
-        case RouteStatusType::route_type_invalid: return "route_type_invalid";
+        case RouteStatusType::timeout:        return "timeout";
+        case RouteStatusType::invalid:        return "invalid";
     }
 }
 #endif // NDEBUG
@@ -66,7 +66,7 @@ public:
         else if(new_status_value == 4) { new_status = RouteStatusType::rright_on_line; }
         else
         {
-            new_status = RouteStatusType::route_type_invalid;
+            new_status = RouteStatusType::invalid;
         }
         if(new_status != current_status)
         {

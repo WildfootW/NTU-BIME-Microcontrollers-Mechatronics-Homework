@@ -54,6 +54,14 @@ int main(void)
 {
     initial();
 
+    while(true)
+    {
+        RouteStatusType current_status = routedetector.get_current_status();
+        if(current_status == RouteStatusType::center_on_line)
+        {
+            wheel_control.go(255);
+        }
+    }
 }
 
 ISR(ADC_vect)
