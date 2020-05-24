@@ -62,19 +62,19 @@ ISR(ADC_vect)
     switch(current_mux)
     {
         case ADConverterMUX::ADC0:
-            ad_converter.get_value();
+            sensor_o.value_update(ad_converter.get_value());
             ad_converter.select_input_channel(ADConverterMUX::ADC1);
             break;
         case ADConverterMUX::ADC1:
-            ad_converter.get_value();
+            sensor_l.value_update(ad_converter.get_value());
             ad_converter.select_input_channel(ADConverterMUX::ADC2);
             break;
         case ADConverterMUX::ADC2:
-            ad_converter.get_value();
+            sensor_c.value_update(ad_converter.get_value());
             ad_converter.select_input_channel(ADConverterMUX::ADC3);
             break;
         case ADConverterMUX::ADC3:
-            ad_converter.get_value();
+            sensor_r.value_update(ad_converter.get_value());
             ad_converter.select_input_channel(ADConverterMUX::ADC0);
             break;
         default:
