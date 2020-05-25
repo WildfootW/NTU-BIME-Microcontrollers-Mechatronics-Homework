@@ -56,9 +56,9 @@ void initial()
 
     wheel_control.initial();
 
-    sensor_l.initial(200);
-    sensor_c.initial(150);
-    sensor_r.initial(230);
+    sensor_l.initial(190);
+    sensor_c.initial(140);
+    sensor_r.initial(220);
 
     obstacledetector.initial();
     routedetector.initial();
@@ -81,7 +81,6 @@ int main(void)
     */
 
     //wheel_control.set_global_ratio(0.5);
-    /*
     while(true)
     {
         routedetector.update_status();
@@ -89,36 +88,50 @@ int main(void)
         switch(current_status)
         {
             case RouteStatusType::center_on_line:
+            {
                 wheel_control.go(255);
                 sevensegment.print(SevenSegmentGraph::number_2);
                 break;
+            }
             case RouteStatusType::llleft_on_line:
+            {
                 wheel_control.turn(70);
                 sevensegment.print(SevenSegmentGraph::number_1);
                 break;
+            }
             case RouteStatusType::center_unknown:
+            {
                 wheel_control.go(50);
                 sevensegment.print(SevenSegmentGraph::number_5);
                 break;
+            }
             case RouteStatusType::rright_unknown:
+            {
                 wheel_control.turn(-100);
                 sevensegment.print(SevenSegmentGraph::number_6);
                 break;
+            }
             case RouteStatusType::llleft_unknown:
+            {
                 wheel_control.turn(100);
                 sevensegment.print(SevenSegmentGraph::number_4);
                 break;
+            }
             case RouteStatusType::rright_on_line:
+            {
                 wheel_control.turn(-70);
                 sevensegment.print(SevenSegmentGraph::number_3);
                 break;
+            }
             case RouteStatusType::invalid:
+            {
                 wheel_control.go(150);
                 sevensegment.print(SevenSegmentGraph::number_7);
                 break;
+            }
         }
     }
-    */
+    /*
     wheel_control.rotate(50);
     while(sensor_o_c.get_distance() > 20)
         wheel_control.go(100);
@@ -147,6 +160,7 @@ int main(void)
                 break;
         }
     }
+    */
 }
 
 ISR(ADC_vect)
