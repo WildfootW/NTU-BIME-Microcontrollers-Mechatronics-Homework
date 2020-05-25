@@ -13,8 +13,7 @@ PROGRAMMER_BAUD     := 19200 # 19200 for ArduinoISP stk500v1
 F_CPU               := 1000000UL
 #F_CPU               := 8000000UL
 TARGET              := main
-#SRCS                := main Setting MySensor ObstacleDetector RouteDetector WheelControl
-SRCS                := main
+SRCS                := main ADConverter Millis ObstacleDetector RouteDetector Sensors SevenSegment WheelControl Usart
 SRCOBJS             := $(addsuffix .o, $(SRCS))
 
 CXX                 := avr-g++

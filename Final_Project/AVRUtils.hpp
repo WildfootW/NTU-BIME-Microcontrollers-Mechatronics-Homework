@@ -8,11 +8,8 @@
 #ifndef AVRUTILS_HPP
 #define AVRUTILS_HPP
 
-extern "C"
-{
-    #include <stdint.h>
-    #include <avr/io.h>
-}
+#include <stdint.h>
+#include <avr/io.h>
 
 /*
  * AVR Register

@@ -22,18 +22,20 @@ SevenSegment sevensegment;
 #include "ADConverter.hpp"
 ADConverter ad_converter; // PC0, 1, 2, 3
 
-#include "Sensors.hpp"
-#include "RouteDetector.hpp"
-#include "ObstacleDetector.hpp"
 #include "WheelControl.hpp"
-
 WheelControl wheel_control; // PD3, 4, 5. PD2, 7, 6. Timer0
+
+#include "Sensors.hpp"
 IrSensor2Y0A21 sensor_o_c; // PC0
 IrSensorTCRT5000 sensor_l; // PC1
 IrSensorTCRT5000 sensor_c; // PC2
 IrSensorTCRT5000 sensor_r; // PC3
 IrSensor2Y0A21 sensor_o_r; // PC4
+
+#include "RouteDetector.hpp"
 RouteDetector routedetector(&sensor_l, &sensor_c, &sensor_r);
+
+#include "ObstacleDetector.hpp"
 ObstacleDetector obstacledetector(&sensor_o_c, &sensor_o_r);
 
 void initial()

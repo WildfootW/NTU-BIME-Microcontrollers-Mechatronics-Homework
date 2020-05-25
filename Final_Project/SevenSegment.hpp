@@ -8,6 +8,7 @@
 
 #ifndef SEVENSEGMENT_HPP
 #define SEVENSEGMENT_HPP
+
 enum class SevenSegmentGraph
 {
     //PGFEDCBA
@@ -27,14 +28,8 @@ class SevenSegment
 {
 public:
     SevenSegment(){}
-    void initial()
-    {
-        DDRB = 0xff;
-    }
-    void print(SevenSegmentGraph graph)
-    {
-        PORTB = ~static_cast<uint8_t>(graph);
-    }
+    void initial();
+    void print(SevenSegmentGraph graph);
 };
 
 #endif //SEVENSEGMENT_HPP
