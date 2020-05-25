@@ -29,6 +29,8 @@ void ADConverter::initial()
     // select left/right adjusted
     //ADMUX |= (1 << ADLAR); // left
     ADMUX &= ~(1 << ADLAR); // right
+
+    start();
 }
 // set which pin to use
 void ADConverter::select_input_channel(ADConverterMUX mux)

@@ -40,7 +40,6 @@ ObstacleDetector obstacledetector(&sensor_o_c, &sensor_o_r);
 
 void initial()
 {
-    sevensegment.print(SevenSegmentGraph::off);
     CLKPR = (1 << CLKPCE);
     CLKPR = 0b00000011; // set clk to 1 Mhz
     //CLKPR = 0b00000000; // set clk to 8 Mhz
@@ -56,15 +55,13 @@ void initial()
     /*
     usart.initial();
     */
+    sevensegment.print(SevenSegmentGraph::off);
 
     wheel_control.initial(0.8);
 
-    //sensor_l.initial(225);
-    //sensor_c.initial(170);
-    //sensor_r.initial(255);
-    sensor_l.initial(235);
+    sensor_l.initial(225);
     sensor_c.initial(170);
-    sensor_r.initial(240);
+    sensor_r.initial(255);
 
     obstacledetector.initial();
     routedetector.initial();
@@ -76,8 +73,7 @@ int main(void)
 {
     initial();
 
-    ad_converter.start();
-
+    /* Usart */
     /*
     while(true)
     {
@@ -91,9 +87,10 @@ int main(void)
     {
         routedetector.update_status();
         RouteStatusType current_status = routedetector.get_current_status();
-        wheel_control.set_global_ratio(0.3);
         switch(current_status)
         {
+            /* only two sensor */
+            /*
             case RouteStatusType::center_on_line:
             {
                 wheel_control.go(255);
@@ -109,7 +106,9 @@ int main(void)
                 wheel_control.rotate(-100);
                 break;
             }
+            */
 
+            /* simple version */
             /*
             case RouteStatusType::center_on_line:
             {
@@ -143,50 +142,47 @@ int main(void)
             }
             */
 
-            /*
+            /* Version 1 */
             case RouteStatusType::center_on_line:
             {
                 wheel_control.go(255);
-                sevensegment.print(SevenSegmentGraph::number_2);
                 break;
             }
             case RouteStatusType::llleft_on_line:
             {
                 wheel_control.turn(70);
-                sevensegment.print(SevenSegmentGraph::number_1);
                 break;
             }
             case RouteStatusType::center_unknown:
             {
                 wheel_control.go(50);
-                sevensegment.print(SevenSegmentGraph::number_5);
                 break;
             }
             case RouteStatusType::rright_unknown:
             {
                 wheel_control.turn(-100);
-                sevensegment.print(SevenSegmentGraph::number_6);
                 break;
             }
             case RouteStatusType::llleft_unknown:
             {
                 wheel_control.turn(100);
-                sevensegment.print(SevenSegmentGraph::number_4);
                 break;
             }
             case RouteStatusType::rright_on_line:
             {
                 wheel_control.turn(-70);
-                sevensegment.print(SevenSegmentGraph::number_3);
                 break;
             }
             case RouteStatusType::invalid:
             {
                 wheel_control.go(150);
-                sevensegment.print(SevenSegmentGraph::number_7);
                 break;
             }
-            */
+
+            default:
+            {
+                break;
+            }
         }
     }
     /*
@@ -236,9 +232,9 @@ ISR(ADC_vect)
             break;
         case ADConverterMUX::ADC2:
             sensor_c.value_update(ad_converter.get_value());
-            ad_converter.select_input_channel(ADConverterMUX::ADC5);
+            ad_converter.select_input_channel(ADConverterMUX::ADC3);
             break;
-        case ADConverterMUX::ADC5:
+        case ADConverterMUX::ADC3:
             sensor_r.value_update(ad_converter.get_value());
             ad_converter.select_input_channel(ADConverterMUX::ADC4);
             break;
