@@ -16,6 +16,9 @@ Usart usart(9600);
 #include "Millis.hpp"
 Millis millis; // Timer1
 
+#include "SevenSegment.hpp"
+SevenSegment sevensegment;
+
 #include "ADConverter.hpp"
 ADConverter ad_converter; // PC0, 1, 2, 3
 
@@ -32,8 +35,6 @@ IrSensorTCRT5000 sensor_r; // PC3
 IrSensor2Y0A21 sensor_o_r; // PC4
 RouteDetector routedetector(&sensor_l, &sensor_c, &sensor_r);
 ObstacleDetector obstacledetector(&sensor_o_c, &sensor_o_r);
-#include "SevenSegment.hpp"
-SevenSegment sevensegment;
 
 void initial()
 {
@@ -54,11 +55,14 @@ void initial()
     usart.initial();
     */
 
-    wheel_control.initial();
+    wheel_control.initial(0.8);
 
-    sensor_l.initial(190);
-    sensor_c.initial(140);
-    sensor_r.initial(220);
+    //sensor_l.initial(225);
+    //sensor_c.initial(170);
+    //sensor_r.initial(255);
+    sensor_l.initial(235);
+    sensor_c.initial(170);
+    sensor_r.initial(240);
 
     obstacledetector.initial();
     routedetector.initial();
@@ -85,8 +89,59 @@ int main(void)
     {
         routedetector.update_status();
         RouteStatusType current_status = routedetector.get_current_status();
+        wheel_control.set_global_ratio(0.3);
         switch(current_status)
         {
+            case RouteStatusType::center_on_line:
+            {
+                wheel_control.go(255);
+                break;
+            }
+            case RouteStatusType::llleft_on_line:
+            {
+                wheel_control.rotate(100); // left turn
+                break;
+            }
+            case RouteStatusType::rright_on_line:
+            {
+                wheel_control.rotate(-100);
+                break;
+            }
+
+            /*
+            case RouteStatusType::center_on_line:
+            {
+                wheel_control.go(255);
+                break;
+            }
+            case RouteStatusType::llleft_on_line:
+            {
+                wheel_control.turn(100); // left turn
+                break;
+            }
+            case RouteStatusType::rright_unknown:
+            {
+                wheel_control.turn(-70);
+                break;
+            }
+            case RouteStatusType::llleft_unknown:
+            {
+                wheel_control.turn(70);
+                break;
+            }
+            case RouteStatusType::rright_on_line:
+            {
+                wheel_control.turn(-100);
+                break;
+            }
+            case RouteStatusType::invalid:
+            {
+                wheel_control.go(150);
+                break;
+            }
+            */
+
+            /*
             case RouteStatusType::center_on_line:
             {
                 wheel_control.go(255);
@@ -129,6 +184,7 @@ int main(void)
                 sevensegment.print(SevenSegmentGraph::number_7);
                 break;
             }
+            */
         }
     }
     /*
@@ -178,9 +234,9 @@ ISR(ADC_vect)
             break;
         case ADConverterMUX::ADC2:
             sensor_c.value_update(ad_converter.get_value());
-            ad_converter.select_input_channel(ADConverterMUX::ADC3);
+            ad_converter.select_input_channel(ADConverterMUX::ADC5);
             break;
-        case ADConverterMUX::ADC3:
+        case ADConverterMUX::ADC5:
             sensor_r.value_update(ad_converter.get_value());
             ad_converter.select_input_channel(ADConverterMUX::ADC4);
             break;

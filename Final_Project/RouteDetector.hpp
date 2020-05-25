@@ -31,7 +31,7 @@ String route_status_to_str(const RouteStatusType type)
         case RouteStatusType::llleft_on_line: return "llleft_on_line";
         case RouteStatusType::center_unknown: return "center_unknown";
         case RouteStatusType::center_on_line: return "center_on_line";
-        case RouteStatusType::rright_unknown: return "rright_unkonwn";
+        case RouteStatusType::rright_unknown: return "rright_unknown";
         case RouteStatusType::rright_on_line: return "rright_on_line";
         case RouteStatusType::timeout:        return "timeout";
         case RouteStatusType::invalid:        return "invalid";
@@ -45,8 +45,86 @@ public:
     void initial() {}
     void update_status()
     {
-        uint8_t new_status_value = 0;
         RouteStatusType new_status = RouteStatusType::invalid;
+
+        if(sensor_l->target_detected() && sensor_r->target_detected())
+            new_status = RouteStatusType::center_on_line;
+        else if(sensor_l->target_detected())
+            new_status = RouteStatusType::llleft_on_line;
+        else if(sensor_r->target_detected())
+            new_status = RouteStatusType::rright_on_line;
+        else
+            new_status = RouteStatusType::center_on_line;
+
+
+        /*
+        if(sensor_c->target_detected())
+        {
+            if(sensor_l->target_detected() && sensor_r->target_detected())
+                new_status = RouteStatusType::center_on_line;
+            else if(sensor_l->target_detected())
+                new_status = RouteStatusType::llleft_unknown;
+            else if(sensor_r->target_detected())
+                new_status = RouteStatusType::rright_unknown;
+            else
+                new_status = RouteStatusType::center_on_line;
+        }
+        else
+        {
+            if(sensor_l->target_detected() && sensor_r->target_detected())
+                new_status = RouteStatusType::invalid;
+            else if(sensor_l->target_detected())
+                new_status = RouteStatusType::llleft_on_line;
+            else if(sensor_r->target_detected())
+                new_status = RouteStatusType::rright_on_line;
+        }
+        */
+
+        /* light */
+        uint8_t new_status_value = 0;
+        if(sensor_l->target_detected()) { new_status_value += 1; }
+        if(sensor_c->target_detected()) { new_status_value += 2; }
+        if(sensor_r->target_detected()) { new_status_value += 4; }
+        switch(new_status_value)
+        {
+            case 0:
+            {
+                sevensegment.print(SevenSegmentGraph::number_0);
+                break;
+            }
+            case 1:
+            {
+                sevensegment.print(SevenSegmentGraph::number_1);
+                break;
+            }
+            case 2:
+            {
+                sevensegment.print(SevenSegmentGraph::number_2);
+                break;
+            }
+            case 3:
+            {
+                sevensegment.print(SevenSegmentGraph::number_3);
+                break;
+            }
+            case 4:
+            {
+                sevensegment.print(SevenSegmentGraph::number_4);
+                break;
+            }
+            case 5:
+            {
+                sevensegment.print(SevenSegmentGraph::number_5);
+                break;
+            }
+            case 6:
+            {
+                sevensegment.print(SevenSegmentGraph::number_6);
+                break;
+            }
+        }
+
+        /* version 1
         if(sensor_l->target_detected()) { new_status_value += 1; }
         if(sensor_c->target_detected()) { new_status_value += 2; }
         if(sensor_r->target_detected()) { new_status_value += 4; }
@@ -64,16 +142,15 @@ public:
         else if(new_status_value == 1) { new_status = RouteStatusType::llleft_on_line; }
         else if(new_status_value == 2) { new_status = RouteStatusType::center_on_line; }
         else if(new_status_value == 4) { new_status = RouteStatusType::rright_on_line; }
-        else
-        {
-            new_status = RouteStatusType::invalid;
-        }
+        */
+
         if(new_status != current_status)
         {
             last_change_status_time = millis.get();
             last_status = current_status;
             current_status = new_status;
         }
+
 #ifndef NDEBUG
         Serial.print(route_status_to_str(current_status) + " ");
         Serial.println(last_change_status_time);
