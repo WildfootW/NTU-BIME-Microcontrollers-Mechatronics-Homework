@@ -6,7 +6,7 @@
  */
 
 #include <avr/interrupt.h>
-#include "AVRUtils.hpp"
+#include "IOPin.hpp"
 
 /*
 #include "Usart.hpp"

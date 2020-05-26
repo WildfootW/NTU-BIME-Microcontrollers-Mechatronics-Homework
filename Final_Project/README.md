@@ -1,16 +1,5 @@
-# Final Project
-
-## Makefile
-* link
-    * compile & link
-* flash
-    * copy elf to ihex
-    * write ihex file to flash via avrdude
-* size
-    * list section sizes and total size
-* clean
-
-## Plan
+# NTU BIME Microcontrollers Mechatronics Final Project README
+## Design
 ### Architecture
 #### I/O Port
 * Wheel
@@ -50,18 +39,44 @@
 ### Framework
 #### Files
 * Makefile
+    * link
+        * compile & link
+    * flash
+        * copy elf to ihex
+        * write ihex file to flash via avrdude
+    * size
+        * list section sizes and total size
+    * clean
 * main.cpp
+* Registers.hpp
+* IOPin.hpp
 * ADConverter.hpp
-* AVRUtils.hpp
+    * Provide interface to interactive with Analog-to-Digital Converter
 * Millis.hpp
+    * Using **Timer1**
+    * Provide millis (& delay) function
 * ObstacleDetector.hpp
+    * Using 2 IR sensor
+    * Determine robots' state
 * RouteDetector.hpp
+    * Using 3 IR sensor
+    * Determine robots' state
 * Sensors.hpp
+    * Using **ADC0-5** (in main/ISR)
+    * Basic sensor function
 * SevenSegment.hpp
+    * Using **PD0-6**
 * Usart.hpp
+    * Using **PD1**
 * WheelControl.hpp
+    * Using **PD2-7**
 
 ## Reference
+### Document
+* Atmel ATmega328P DATASHEET
+* Real-Time C++
+
+### Other
 * [avr/iom328p.h](https://github.com/vancegroup-mirrors/avr-libc/blob/master/avr-libc/include/avr/iom328p.h)
 * [TTU Robotiklubi - ATmega88 avr/cpp/IO.h](http://avr-cpp-lib.sourceforge.net/ATmega88/_i_o_8h-source.html)
 * [libpololu-avr](https://github.com/pololu/libpololu-avr)

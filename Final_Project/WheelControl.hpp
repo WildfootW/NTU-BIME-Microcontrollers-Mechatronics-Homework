@@ -12,7 +12,7 @@
  * Pin: PD2, PD3, PD4, PD5, PD6, PD7
  * Timer: Timer0
  */
-#include "AVRUtils.hpp"
+#include "IOPin.hpp"
 
 template<class pin_a, class pin_b, class pin_en, class output_compare_register> // digital, digital, pwm
 class SingleWheelControl
