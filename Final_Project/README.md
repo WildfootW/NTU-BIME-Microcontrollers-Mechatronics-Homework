@@ -13,8 +13,6 @@
 ## Plan
 ### Architecture
 #### I/O Port
-* Serial
-    * PD1 (TXD)
 * Wheel
     * llleft
         * PD3
@@ -26,21 +24,42 @@
         * PD6 (OC0A)
 * Sensor
     * ObstacleDetector
-        * PC0 (ADC0)
+        * PC0 (ADC0) - center
+        * PC4 (ADC4) - right
     * RouteDetector
         * PC1 (ADC1) - llleft
         * PC2 (ADC2) - center
         * PC3 (ADC3) - rright
+* SevenSegment
+    * PB0 - PB7
+* Serial
+    * PD1 (TXD)
 
 ### Workflow
+* main
+    * initial
+    * loop
+        * update detector status ( according to current sensor value )
+        * let the wheels respond to the state
+* input
+    * trigger interrupt while complete reading from ADC
+    * pass value to sensor
+    * change input channel to next channel
+    * start next ADC
 
 ### Framework
 #### Files
+* Makefile
 * main.cpp
-* RouteDetector.h
-* ObstacleDetector.h
-* MySensor.h
-* WheelControl.h
+* ADConverter.hpp
+* AVRUtils.hpp
+* Millis.hpp
+* ObstacleDetector.hpp
+* RouteDetector.hpp
+* Sensors.hpp
+* SevenSegment.hpp
+* Usart.hpp
+* WheelControl.hpp
 
 ## Reference
 * [avr/iom328p.h](https://github.com/vancegroup-mirrors/avr-libc/blob/master/avr-libc/include/avr/iom328p.h)
@@ -95,5 +114,5 @@ template<class T> T X<T>::operator+(T arg1) {
 * [Declaring an enum within a class](https://stackoverflow.com/questions/2503807/declaring-an-enum-within-a-class)
 
 ## TODO
-* how to read multiple ADC input
+* fix Usart
 
