@@ -63,9 +63,11 @@
 
 ## Reference
 * [avr/iom328p.h](https://github.com/vancegroup-mirrors/avr-libc/blob/master/avr-libc/include/avr/iom328p.h)
-* [AvrLib/inc/HAL/Atmel/Pin.hpp](https://github.com/jypma/AvrLib/blob/master/inc/HAL/Atmel/Pin.hpp)
 * [TTU Robotiklubi - ATmega88 avr/cpp/IO.h](http://avr-cpp-lib.sourceforge.net/ATmega88/_i_o_8h-source.html)
 * [libpololu-avr](https://github.com/pololu/libpololu-avr)
+* jypma
+    * [AvrLib](https://github.com/jypma/AvrLib)
+    * [AvrLibDemo](https://github.com/jypma/AvrLibDemo)
 
 ## Note / Problemshooting
 ### Object Oriented
@@ -112,6 +114,30 @@ template<class T> T X<T>::operator+(T arg1) {
 ### enum class
 * [Why is enum class preferred over plain enum?](https://stackoverflow.com/questions/18335861/why-is-enum-class-preferred-over-plain-enum)
 * [Declaring an enum within a class](https://stackoverflow.com/questions/2503807/declaring-an-enum-within-a-class)
+* [How to cast int to enum in C++?](https://stackoverflow.com/questions/11452920/how-to-cast-int-to-enum-in-c)
+* [Enum Class Default Initialization](https://stackoverflow.com/questions/53897991/enum-class-default-initialization)
+* [How to use enums as flags in C++?](https://stackoverflow.com/questions/1448396/how-to-use-enums-as-flags-in-c)
+```
+enum class SevenSegmentGraph
+{
+    //PGFEDCBA
+    number_0 = 0b00111111, // 0
+    number_1 = 0b00000110, // 1
+    number_2 = 0b01011011, // 2
+    ...
+    number_7 = 0b00000111, // 7
+};
+```
+```
+PORTB = ~static_cast<uint8_t>(graph);
+```
+
+### Usart Baud Rate error
+* [AVR Baud Rate Tables](https://cache.amobbs.com/bbs_upload782111/files_22/ourdev_508497.html)
+
+### Power
+* [Feeding power to Arduino: the ultimate guide](https://www.open-electronics.org/the-power-of-arduino-this-unknown/)
+> Vin socket: as said before, this one can be useful as input if an external voltage is needed and you only have 6 V available, in fact the Vin socket bypasses the protection diode and the regulator may operate properly; or it may be useful to draw the voltage coming from the JACK socket;
 
 ## TODO
 * fix Usart
