@@ -1,4 +1,6 @@
 # NTU BIME Microcontrollers Mechatronics Final Project README
+###### tags: `github`
+
 ## Design
 ### Architecture
 #### I/O Port
