@@ -42,7 +42,17 @@
 * MySensor.h
 * WheelControl.h
 
-## Problemshooting
+## Reference
+* [avr/iom328p.h](https://github.com/vancegroup-mirrors/avr-libc/blob/master/avr-libc/include/avr/iom328p.h)
+* [AvrLib/inc/HAL/Atmel/Pin.hpp](https://github.com/jypma/AvrLib/blob/master/inc/HAL/Atmel/Pin.hpp)
+* [TTU Robotiklubi - ATmega88 avr/cpp/IO.h](http://avr-cpp-lib.sourceforge.net/ATmega88/_i_o_8h-source.html)
+* [libpololu-avr](https://github.com/pololu/libpololu-avr)
+
+## Note / Problemshooting
+### Object Oriented
+* [Electronics - C++ classes for I/O pin abstraction](https://electronics.stackexchange.com/questions/19057/c-classes-for-i-o-pin-abstraction)
+* [Objects? No, thanks! (Using C++ effectively on small systems)](https://www.embedded.com/objects-no-thanks-using-c-effectively-on-small-systems/)
+
 ### Register Data Type
 ```c
 #define _MMIO_BYTE(mem_addr) (*(volatile uint8_t *)(mem_addr))
@@ -65,6 +75,24 @@ AVRUtils.hpp:70:54: error: ‘*37u’ is not a constant expression
 ```
 I need to use struct `AVR_REGISTER_DDRD` packing `DDRD` while as template argument.
 * [stackoverflow - constexpr reference to avr port address](https://stackoverflow.com/questions/41077173/constexpr-reference-to-avr-port-address)
+* [What exactly is a 'side-effect' in C++?](https://stackoverflow.com/questions/9563600/what-exactly-is-a-side-effect-in-c)
+
+### Member functions of class templates
+```
+template<class T> class X {
+   public:
+      T operator+(T);
+};
+
+template<class T> T X<T>::operator+(T arg1) {
+   return arg1;
+};
+```
+* [Member functions of class templates (C++ only)](https://www.ibm.com/support/knowledgecenter/SSLTBW_2.3.0/com.ibm.zos.v2r3.cbclx01/member_function_templates.htm)
+
+### enum class
+* [Why is enum class preferred over plain enum?](https://stackoverflow.com/questions/18335861/why-is-enum-class-preferred-over-plain-enum)
+* [Declaring an enum within a class](https://stackoverflow.com/questions/2503807/declaring-an-enum-within-a-class)
 
 ## TODO
 * how to read multiple ADC input
