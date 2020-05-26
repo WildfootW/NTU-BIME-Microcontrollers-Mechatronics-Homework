@@ -157,5 +157,7 @@ PORTB = ~static_cast<uint8_t>(graph);
 
 ## TODO
 * fix Usart
-* avr-gdb
+
+## AVR Debug
+[AVR Debugging on Linux (with debugWire)](http://luniks.net/avr-debug.jsp)
 
