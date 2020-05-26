@@ -69,7 +69,7 @@
 * Usart.hpp
     * Using **PD1**
 * WheelControl.hpp
-    * Using **PD2-7**
+    * Using **PD2-7**, **Timer0**
 
 ## Reference
 ### Document
@@ -77,6 +77,7 @@
 * Real-Time C++
 
 ### Other
+* NTU BIME Principles and Applications of Microcontrollers Y.-F. Kuo
 * [avr/iom328p.h](https://github.com/vancegroup-mirrors/avr-libc/blob/master/avr-libc/include/avr/iom328p.h)
 * [TTU Robotiklubi - ATmega88 avr/cpp/IO.h](http://avr-cpp-lib.sourceforge.net/ATmega88/_i_o_8h-source.html)
 * [libpololu-avr](https://github.com/pololu/libpololu-avr)
@@ -156,4 +157,5 @@ PORTB = ~static_cast<uint8_t>(graph);
 
 ## TODO
 * fix Usart
+* avr-gdb
 
