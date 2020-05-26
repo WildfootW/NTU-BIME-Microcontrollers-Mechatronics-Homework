@@ -1,5 +1,5 @@
 # NTU BIME Microcontrollers Mechatronics Final Project README
-###### tags: `github`
+###### tags: `GitHub`
 
 ## Design
 ### Architecture
@@ -157,9 +157,8 @@ PORTB = ~static_cast<uint8_t>(graph);
 * [Feeding power to Arduino: the ultimate guide](https://www.open-electronics.org/the-power-of-arduino-this-unknown/)
 > Vin socket: as said before, this one can be useful as input if an external voltage is needed and you only have 6 V available, in fact the Vin socket bypasses the protection diode and the regulator may operate properly; or it may be useful to draw the voltage coming from the JACK socket;
 
+## AVR Debug
+* [AVR Debugging on Linux (with debugWire)](http://luniks.net/avr-debug.jsp)
+
 ## TODO
 * fix Usart
-
-## AVR Debug
-[AVR Debugging on Linux (with debugWire)](http://luniks.net/avr-debug.jsp)
-
