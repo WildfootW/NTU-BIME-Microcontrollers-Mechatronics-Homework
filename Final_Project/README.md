@@ -1,6 +1,7 @@
 # NTU BIME Microcontrollers Mechatronics Final Project README
 ###### tags: `GitHub`
 
+# Software
 ## Design
 ### Architecture
 #### I/O Port
@@ -162,3 +163,9 @@ PORTB = ~static_cast<uint8_t>(graph);
 
 ## TODO
 * fix Usart
+
+# Hardware
+![](https://i.imgur.com/ohnuuqR.png)
+![](https://i.imgur.com/GRvnWSt.jpg)
+![](https://i.imgur.com/AaaX1mL.jpg)
+
