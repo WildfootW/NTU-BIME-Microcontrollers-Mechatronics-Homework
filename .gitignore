@@ -3,3 +3,4 @@
 *.hex
 *.ihex
 *.o
+*.out
