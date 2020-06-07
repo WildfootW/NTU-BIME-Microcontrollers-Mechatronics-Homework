@@ -1,3 +1,8 @@
+; main.S
+; Author: WildfootW
+; GitHub: github.com/WildfootW
+; Copyleft (C) 2020 WildfootW all rights reversed
+
 #define __SFR_OFFSET 0
 #include <avr/io.h>
 
