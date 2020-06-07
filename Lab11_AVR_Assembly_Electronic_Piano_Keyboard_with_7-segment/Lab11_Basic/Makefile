@@ -18,8 +18,8 @@ PROGRAMMER=stk500v1 # ArduinoISP
 PROGRAMMER_BAUD=19200 # 19200 for ArduinoISP stk500v1
 
 TARGET=main
-#SOURCES := main
-SOURCES := blink
+SOURCES := main
+#SOURCES := blink
 
 all: assemble flash
 
