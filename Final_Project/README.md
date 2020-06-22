@@ -1,5 +1,5 @@
 # NTU BIME Microcontrollers Mechatronics Final Project README
-###### tags: `GitHub`
+###### tags: `readme`
 
 # Software
 ## Design
